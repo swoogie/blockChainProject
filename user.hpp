@@ -7,15 +7,14 @@ using std::string;
 
 class user{
     public: 
+    user(string name, string publicKey, int balance);
     string name;
     string publicKey;
     int balance;
 
-    user(string name, string publicKey, int balance);
-
-    string getName;
-    string getPublicKey;
-    string getBalance;
+    string getName();
+    string getPublicKey();
+    int getBalance();
 };
 
 user::user(string name, string publicKey, int balance){
@@ -24,3 +23,14 @@ user::user(string name, string publicKey, int balance){
     this->balance = balance;
 }
 
+string user::getName(){
+    return this->name;
+}
+
+string user::getPublicKey(){
+    return this->publicKey;
+}
+
+int user::getBalance(){
+    return this->balance;
+}

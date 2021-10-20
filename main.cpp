@@ -5,12 +5,13 @@
 #include "user.hpp"
 #include "rng.hpp"
 #include "hashing.hpp"
+#include "transactions.hpp"
 
 using namespace std;
 
 int main(){
+    vector<user> listOfUsers;
     for(int i=0; i<1000; i++){
-        vector<user> listOfUsers;
         string name = "user" + to_string(i+1);
         int balance = getRandomInteger(100,1000000);
         string publicKey;
@@ -20,5 +21,12 @@ int main(){
         publicKey = hashFun(publicKey);
         user newUser(name, publicKey, balance);
         listOfUsers.push_back(newUser);
+    }
+    
+    for(int i=0; i<10000; i++){
+        user* sender = &listOfUsers[getRandomInteger(1,1000)];
+        user* receiver = &listOfUsers[getRandomInteger(1,1000)];
+        vector<transaction> listOfTransactions;
+        transaction newTransaction(sender, receiver, getRandomInteger(100,1000000))
     }
 }
