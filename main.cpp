@@ -37,4 +37,5 @@ int main(){
         newBlock.addTransaction(pool[getRandomInteger(1,10000)]);
         newBlock.index++;
     }
+    newBlock.setMerkleRootHash();
 }

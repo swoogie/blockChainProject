@@ -24,7 +24,11 @@ class block{
         void addTransaction(transaction transaction){
             transactions.push_back(transaction);
         }
-        void setMerkleRootHash(vector<transaction> transactions){
-            
+        void setMerkleRootHash(){
+            string newHash;
+            for(int i=0; i<transactions.size(); i++){
+                newHash += transactions[i].transactionID;
+            }
+            merkleRootHash = hashFun(newHash);
         }
 };
