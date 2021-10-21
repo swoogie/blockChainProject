@@ -11,6 +11,7 @@ using namespace std;
 
 int main(){
     vector<user> listOfUsers;
+    vector<transaction> listOfTransactions;
     for(int i=0; i<1000; i++){
         string name = "user" + to_string(i+1);
         int balance = getRandomInteger(100,1000000);
@@ -25,8 +26,8 @@ int main(){
     
     for(int i=0; i<10000; i++){
         user* sender = &listOfUsers[getRandomInteger(1,1000)];
-        user* receiver = &listOfUsers[getRandomInteger(1,1000)];
-        vector<transaction> listOfTransactions;
-        transaction newTransaction(sender, receiver, getRandomInteger(100,1000000))
+        user* receiver = &listOfUsers[getRandomInteger(1,1000)]; 
+        transaction newTransaction(sender, receiver, getRandomInteger(100,1000000));
+        listOfTransactions.push_back(newTransaction);
     }
 }
