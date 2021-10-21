@@ -5,9 +5,9 @@
 
 using std::string;
 
-class user{
+class User{
     public: 
-    user(string name, string publicKey, int balance);
+    User(string name, string publicKey, int balance);
     string name;
     string publicKey;
     int balance;
@@ -17,20 +17,20 @@ class user{
     int getBalance();
 };
 
-user::user(string name, string publicKey, int balance){
+User::User(string name, string publicKey, int balance){
     this->name = name;
     this->publicKey = publicKey;
     this->balance = balance;
 }
 
-string user::getName(){
+string User::getName(){
     return this->name;
 }
 
-string user::getPublicKey(){
+string User::getPublicKey(){
     return this->publicKey;
 }
 
-int user::getBalance(){
+int User::getBalance(){
     return this->balance;
 }

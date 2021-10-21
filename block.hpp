@@ -7,7 +7,7 @@
 using std::vector;
 using namespace std::chrono;
 
-class block{
+class Block{
     public:
         int index = 0;
         string prevHash;
@@ -15,13 +15,13 @@ class block{
         unsigned int timestamp = 0;
         int nonce = 0;
         int version = 1;
-        int difficulty = 4;
-        vector<transaction> transactions;
+        unsigned int difficulty = 4;
+        vector<Transaction> transactions;
 
-        block(){
+        Block(){
             this->timestamp = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
         }
-        void addTransaction(transaction transaction){
+        void addTransaction(Transaction transaction){
             transactions.push_back(transaction);
         }
         void setMerkleRootHash(){
@@ -30,5 +30,9 @@ class block{
                 newHash += transactions[i].transactionID;
             }
             merkleRootHash = hashFun(newHash);
+        }
+        void mineBlock(unsigned int difficulty){
+            
+
         }
 };

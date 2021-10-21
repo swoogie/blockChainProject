@@ -6,17 +6,17 @@
 using std::string;
 using std::to_string;
 
-class transaction{
+class Transaction{
     public:
-        transaction(user* publicSender, user* publicReceiver, int amount);
+        Transaction(User* publicSender, User* publicReceiver, int amount);
         string transactionID;
-        user* publicSender;
-        user* publicReceiver;
+        User* publicSender;
+        User* publicReceiver;
         int amount;
 
 };
 
-transaction::transaction(user* publicSender, user* publicReceiver, int amount){
+Transaction::Transaction(User* publicSender, User* publicReceiver, int amount){
     this->publicSender = publicSender;
         this->publicReceiver = publicReceiver;
         this->amount = amount;
