@@ -1,17 +1,18 @@
 #include <cstdint>
 #include <iostream>
-#include <vector>
+
 
 #include "user.hpp"
 #include "rng.hpp"
 #include "hashing.hpp"
 #include "transactions.hpp"
+#include "block.hpp"
 
 using namespace std;
 
 int main(){
     vector<user> listOfUsers;
-    vector<transaction> listOfTransactions;
+    vector<transaction> pool;
     for(int i=0; i<1000; i++){
         string name = "user" + to_string(i+1);
         int balance = getRandomInteger(100,1000000);
@@ -26,8 +27,14 @@ int main(){
     
     for(int i=0; i<10000; i++){
         user* sender = &listOfUsers[getRandomInteger(1,1000)];
-        user* receiver = &listOfUsers[getRandomInteger(1,1000)]; 
-        transaction newTransaction(sender, receiver, getRandomInteger(100,1000000));
-        listOfTransactions.push_back(newTransaction);
+        user* receiver = &listOfUsers[getRandomInteger(1,1000)];
+        transaction newTransaction(sender, receiver, getRandomInteger(0,sender->balance));
+        pool.push_back(newTransaction);
+    }
+
+    block newBlock;
+    for(int i=0; i<100; i++){
+        newBlock.addTransaction(pool[getRandomInteger(1,10000)]);
+        newBlock.index++;
     }
 }
