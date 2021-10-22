@@ -9,7 +9,7 @@ class Blockchain {
     public:
         Blockchain(Block genesisBlock);
 
-        void AddBlock(Block bNew);
+        void addBlock(Block bNew);
 
     private:
         unsigned int difficulty;
@@ -26,7 +26,7 @@ Block Blockchain::getLastBlock() const{
     return chain.back();
 }
 
-void Blockchain::AddBlock(Block bNew) {
+void Blockchain::addBlock(Block bNew) {
     bNew.prevHash = getLastBlock().getHash();
     bNew.mineBlock(difficulty);
     chain.push_back(bNew);

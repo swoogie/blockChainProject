@@ -13,7 +13,7 @@ using namespace std;
 
 int main(){
     vector<User> listOfUsers;
-    vector<Transaction> pool;
+    vector<Transaction> tPool;
     for(int i=0; i<1000; i++){
         string name = "user" + to_string(i+1);
         int balance = getRandomInteger(100,1000000);
@@ -30,17 +30,28 @@ int main(){
         User* sender = &listOfUsers[getRandomInteger(1,1000)];
         User* receiver = &listOfUsers[getRandomInteger(1,1000)];
         Transaction newTransaction(sender, receiver, getRandomInteger(0,sender->balance));
-        pool.push_back(newTransaction);
+        tPool.push_back(newTransaction);
     }
 
     vector<Transaction> tToBlock;
     for(int i=0; i<100; i++){
-        tToBlock.push_back(pool[getRandomInteger(1,10000)]);
-    }
-
-    Block genesisBlock(1, tToBlock);
-    Blockchain newChain(genesisBlock);
+        int tIndex = getRandomInteger(1,10000);
+        tToBlock.push_back(tPool[tIndex]);
+        int senderBalance = tPool[tIndex].publicSender->balance;
+        int receiverBalance = tPool[tIndex].publicReceiver->balance;
+        int tAmount = tPool[tIndex].amount;
+        tPool.erase(tPool.begin()+(tIndex-1));
+        senderBalance -= tAmount;
+        receiverBalance += tAmount;
 
     
+
+    Block genesisBlock(0, tToBlock);
+    Blockchain bChain(genesisBlock);
+
+
+
+    bChain.addBlock(Block(1, tToBlock));
+
     //newBlock.setMerkleRootHash();
 }
