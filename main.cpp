@@ -32,10 +32,12 @@ int main(){
         pool.push_back(newTransaction);
     }
 
-    Block newBlock;
+    vector<Transaction> tToBlock;
     for(int i=0; i<100; i++){
-        newBlock.addTransaction(pool[getRandomInteger(1,10000)]);
-        newBlock.index++;
+        tToBlock.push_back(pool[getRandomInteger(1,10000)]);
     }
-    newBlock.setMerkleRootHash();
+
+    Block newBlock(1, tToBlock);
+    
+    //newBlock.setMerkleRootHash();
 }
