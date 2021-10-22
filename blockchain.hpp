@@ -7,7 +7,7 @@ using namespace std;
 
 class Blockchain {
     public:
-        Blockchain(vector<Transaction> transactions);
+        Blockchain(Block genesisBlock);
 
         void AddBlock(Block bNew);
 
@@ -17,8 +17,8 @@ class Blockchain {
         Block getLastBlock() const;
 };
 
-Blockchain::Blockchain(vector<Transaction> transactions) {
-    chain.emplace_back(Block(0, transactions));
+Blockchain::Blockchain(Block genesisBlock) {
+    chain.emplace_back(genesisBlock);
     difficulty = 4;
 }
 

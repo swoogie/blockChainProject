@@ -7,6 +7,7 @@
 #include "hashing.hpp"
 #include "transactions.hpp"
 #include "block.hpp"
+#include "blockchain.hpp"
 
 using namespace std;
 
@@ -37,7 +38,9 @@ int main(){
         tToBlock.push_back(pool[getRandomInteger(1,10000)]);
     }
 
-    Block newBlock(1, tToBlock);
+    Block genesisBlock(1, tToBlock);
+    Blockchain newChain(genesisBlock);
+
     
     //newBlock.setMerkleRootHash();
 }
