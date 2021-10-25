@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 #include <chrono>
 #include <sstream>
 
@@ -18,10 +18,6 @@ class Block{
 
         Block(int nIndexIn, vector<Transaction> transactions);
         string getHash();
-
-        void addTransaction(Transaction transaction){
-            transactions.push_back(transaction);
-        }
 
         void mineBlock(uint64_t difficulty);
         
@@ -51,7 +47,7 @@ string Block::genMerkleRootHash(){
             for(int i=0; i<transactions.size(); i++){
                 newHash += transactions[i].transactionID;
             }
-            merkleRootHash = hashFun(newHash);
+            return hashFun(newHash);
 }
 
 string Block::calculateHash() const{

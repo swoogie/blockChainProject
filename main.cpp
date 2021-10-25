@@ -11,6 +11,17 @@
 
 using namespace std;
 
+void addTransactionsToBlock(vector<Transaction> tToBlock, vector<Transaction> tPool){
+    for(int i=0; i<100; i++){
+        int tIndex = getRandomInteger(1,10000);
+        int tAmount = tPool[tIndex].amount;
+        tPool[tIndex].publicSender->balance -= tAmount;
+        tPool[tIndex].publicReceiver->balance += tAmount;
+        tToBlock.push_back(tPool[tIndex]);
+        tPool.erase(tPool.begin()+(tIndex-1));
+    }
+}
+
 int main(){
     vector<User> listOfUsers;
     vector<Transaction> tPool;
@@ -34,24 +45,24 @@ int main(){
     }
 
     vector<Transaction> tToBlock;
-    for(int i=0; i<100; i++){
-        int tIndex = getRandomInteger(1,10000);
-        tToBlock.push_back(tPool[tIndex]);
-        int senderBalance = tPool[tIndex].publicSender->balance;
-        int receiverBalance = tPool[tIndex].publicReceiver->balance;
-        int tAmount = tPool[tIndex].amount;
-        tPool.erase(tPool.begin()+(tIndex-1));
-        senderBalance -= tAmount;
-        receiverBalance += tAmount;
-
-    
-
+    addTransactionsToBlock(tToBlock, tPool);
+    cout << "genesis block\n";
     Block genesisBlock(0, tToBlock);
     Blockchain bChain(genesisBlock);
 
-
-
+    tToBlock.clear();
+    cout << "mining block 1\n";
+    addTransactionsToBlock(tToBlock, tPool);
     bChain.addBlock(Block(1, tToBlock));
+
+    tToBlock.clear();
+    cout << "mining block 2\n";
+    addTransactionsToBlock(tToBlock, tPool);
+    bChain.addBlock(Block(2, tToBlock));
+
+    tToBlock.clear();
+
+    
 
     //newBlock.setMerkleRootHash();
 }
