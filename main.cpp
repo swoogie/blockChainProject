@@ -1,7 +1,6 @@
 #include <cstdint>
 #include <iostream>
 
-
 #include "user.hpp"
 #include "rng.hpp"
 #include "hashing.hpp"
@@ -11,14 +10,15 @@
 
 using namespace std;
 
-void addTransactionsToBlock(vector<Transaction> tToBlock, vector<Transaction> tPool){
+void addTransactionsToBlock(vector<Transaction> tToBlock, vector<Transaction> &tPool, int &numOfTransactions){
     for(int i=0; i<100; i++){
-        int tIndex = getRandomInteger(1,10000);
+        int tIndex = getRandomInteger(0,numOfTransactions);
         int tAmount = tPool[tIndex].amount;
         tPool[tIndex].publicSender->balance -= tAmount;
         tPool[tIndex].publicReceiver->balance += tAmount;
         tToBlock.push_back(tPool[tIndex]);
         tPool.erase(tPool.begin()+(tIndex-1));
+        numOfTransactions--;
     }
 }
 
@@ -29,7 +29,7 @@ int main(){
         string name = "user" + to_string(i+1);
         int balance = getRandomInteger(100,1000000);
         string publicKey;
-        for(int i=0; i<getRandomInteger(4,16); i< i++){
+        for(int i=0; i<getRandomInteger(4,16); i++){
             publicKey += char(getRandomInteger(33, 126));
         }
         publicKey = hashFun(publicKey);
@@ -38,31 +38,31 @@ int main(){
     }
     
     for(int i=0; i<10000; i++){
-        User* sender = &listOfUsers[getRandomInteger(1,1000)];
-        User* receiver = &listOfUsers[getRandomInteger(1,1000)];
+        int sIndex = getRandomInteger(0,1000);
+        int rIndex = getRandomInteger(0,1000);
+        while(sIndex == rIndex){
+            sIndex = getRandomInteger(0,1000);
+            rIndex = getRandomInteger(0,1000);
+        }
+        User* sender = &listOfUsers[sIndex];
+        User* receiver = &listOfUsers[rIndex];
         Transaction newTransaction(sender, receiver, getRandomInteger(0,sender->balance));
         tPool.push_back(newTransaction);
     }
 
     vector<Transaction> tToBlock;
-    addTransactionsToBlock(tToBlock, tPool);
-    cout << "genesis block\n";
+    int numOfTransactions = 10000;
+    addTransactionsToBlock(tToBlock, tPool, numOfTransactions);
     Block genesisBlock(0, tToBlock);
     Blockchain bChain(genesisBlock);
+    int i = 1;
+    while(tPool.size()>=100){
+        tToBlock.clear();
+        addTransactionsToBlock(tToBlock, tPool, numOfTransactions);
+        cout << "Mining block " << i << "\n";
+        bChain.addBlock(Block(i, tToBlock));
+        i++;
+    }
 
     tToBlock.clear();
-    cout << "mining block 1\n";
-    addTransactionsToBlock(tToBlock, tPool);
-    bChain.addBlock(Block(1, tToBlock));
-
-    tToBlock.clear();
-    cout << "mining block 2\n";
-    addTransactionsToBlock(tToBlock, tPool);
-    bChain.addBlock(Block(2, tToBlock));
-
-    tToBlock.clear();
-
-    
-
-    //newBlock.setMerkleRootHash();
 }

@@ -19,7 +19,3 @@ int getRandomInteger(int min, int max) {
 
   return uid(mt);
 }
-
-void generateTextFile(string newFileName);
-
-void generateStrings();

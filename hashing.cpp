@@ -16,7 +16,7 @@ string hashFun(string str){
     string hexHash;
 
     for(int i=0; i<64; i++){
-        index += int(hashStr[i % hashStrSize]) + i*primeInt*31;
+        index += int(hashStr[i % hashStrSize]) + i*primeInt;
         hexHash += hex[index % 16];
     }
     //cout << hexHash << std::endl;

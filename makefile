@@ -1,12 +1,4 @@
 main: 
-	g++ main.cpp hashing.cpp -o main.exe
-
-compile:
-	g++ -c main.cpp hashing.cpp -o 
-
-link:
-	g++ -o main.exe main.o read.o
-
+	g++ main.cpp hashing.cpp user.cpp transactions.cpp block.cpp blockchain.cpp -o main.exe
 del:
-
 	rm *.o *.exe
