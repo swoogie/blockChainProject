@@ -10,6 +10,15 @@
 
 using namespace std;
 
+bool valid(string transactionID, User* publicSender, User* publicReceiver, int amount){
+    if (transactionID == hashFun(publicSender->getPublicKey() + publicReceiver->getPublicKey() + to_string(amount))){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 void addTransactionsToBlock(vector<Transaction> &tToBlock, vector<Transaction> &tPool, int &numOfTransactions){
     for(int i=0; i<100; i++){
         int tIndex = getRandomInteger(0,numOfTransactions);
@@ -47,8 +56,11 @@ int main(){
         }
         User* sender = &listOfUsers[sIndex];
         User* receiver = &listOfUsers[rIndex];
-        Transaction newTransaction(sender, receiver, getRandomInteger(0,sender->balance));
-        tPool.push_back(newTransaction);
+        int balance = getRandomInteger(0,sender->balance);
+        Transaction newTransaction(sender, receiver, balance);
+        if(valid(newTransaction.transactionID, sender, receiver, balance)){
+            tPool.push_back(newTransaction);
+        }
     }
 
     vector<Transaction> tToBlock;
