@@ -10,14 +10,15 @@
 
 using namespace std;
 
-void addTransactionsToBlock(vector<Transaction> tToBlock, vector<Transaction> &tPool, int &numOfTransactions){
+void addTransactionsToBlock(vector<Transaction> &tToBlock, vector<Transaction> &tPool, int &numOfTransactions){
     for(int i=0; i<100; i++){
         int tIndex = getRandomInteger(0,numOfTransactions);
         int tAmount = tPool[tIndex].amount;
         tPool[tIndex].publicSender->balance -= tAmount;
         tPool[tIndex].publicReceiver->balance += tAmount;
         tToBlock.push_back(tPool[tIndex]);
-        tPool.erase(tPool.begin()+(tIndex-1));
+        cout << "Sender key: " << tPool[tIndex].senderKey << " Receiver key: " << tPool[tIndex].receiverKey << " Amount: " << tPool[tIndex].amount << "\n";
+        tPool.erase(tPool.begin()+(tIndex));
         numOfTransactions--;
     }
 }
@@ -63,6 +64,6 @@ int main(){
         bChain.addBlock(Block(i, tToBlock));
         i++;
     }
-
+    cout << "finished. \n";
     tToBlock.clear();
 }
