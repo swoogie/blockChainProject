@@ -2,7 +2,7 @@
 
 Blockchain::Blockchain(Block genesisBlock) {
     chain.emplace_back(genesisBlock);
-    difficulty = 1;
+    difficulty = 3;
 }
 
 Block Blockchain::getLastBlock() const{
