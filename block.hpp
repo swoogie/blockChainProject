@@ -11,22 +11,21 @@ using namespace std::chrono;
 class Block{
     public:
         string prevHash;
-        string merkleRootHash;
         int version = 1;
         unsigned int difficulty;
         vector<Transaction> transactions;
-
-        Block(int nIndexIn, vector<Transaction> transactions);
+        string sHash;
+        int index;
+        Block(int nIndexIn, vector<Transaction> transaction);
         string getHash();
-
-        void mineBlock(unsigned int difficulty);
+        string mineBlock(unsigned int difficulty, int allowedAttempts);
         
-        private:
-            int index;
-            int nonce;
-            string sData;
-            string sHash;
-            int timestamp = 0;
-            string genMerkleRootHash();
-            string calculateHash() const;
+    private:
+        string merkleRootHash;
+        int nonce;
+        string sData;
+        int timestamp = 0;
+        string genMerkleRootHash();
+        string calculateHash() const;
+            
 };

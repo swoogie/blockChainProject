@@ -9,8 +9,14 @@ Block Blockchain::getLastBlock() const{
     return chain.back();
 }
 
-void Blockchain::addBlock(Block bNew) {
+string Blockchain::addBlock(int allowedAttempts, Block bNew) {
     bNew.prevHash = getLastBlock().getHash();
-    bNew.mineBlock(difficulty);
-    chain.push_back(bNew);
+    string confirmation = bNew.mineBlock(difficulty, allowedAttempts);
+    if(confirmation == "0"){
+        return "0";
+    }
+    else{
+        chain.push_back(bNew);
+        return "nice";
+    }
 }

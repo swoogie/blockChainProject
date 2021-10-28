@@ -63,19 +63,30 @@ int main(){
         }
     }
 
-    vector<Transaction> tToBlock;
+    vector<Transaction> tToBlock[5];
     int numOfTransactions = 10000;
-    addTransactionsToBlock(tToBlock, tPool, numOfTransactions);
-    Block genesisBlock(0, tToBlock);
+    addTransactionsToBlock(tToBlock[0], tPool, numOfTransactions);
+    Block genesisBlock(0, tToBlock[0]);
     Blockchain bChain(genesisBlock);
     int i = 1;
     while(tPool.size()>=100){
-        tToBlock.clear();
-        addTransactionsToBlock(tToBlock, tPool, numOfTransactions);
+        for(int j=0; j<5; j++){
+            tToBlock[j].clear();
+            addTransactionsToBlock(tToBlock[j], tPool, numOfTransactions);
+        }
         cout << "Mining block " << i << "\n";
-        bChain.addBlock(Block(i, tToBlock));
+        for(int j=0; j<5; j++){ 
+            if(bChain.addBlock(100000, Block(i, tToBlock[j])) == "0"){
+                continue;
+            }
+            else{
+                int lastMember = bChain.chain.size();
+                cout << "Hash of Block" << bChain.chain[lastMember].index << ": " << bChain.chain[lastMember].sHash << "\n"; 
+                break;
+            }
+        }
         i++;
     }
     cout << "finished. \n";
-    tToBlock.clear();
+    tToBlock[1,2,3,4,5].clear();
 }

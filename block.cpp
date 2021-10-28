@@ -27,7 +27,7 @@ string Block::calculateHash() const{
 }
 
 
-void Block::mineBlock(unsigned int difficulty){
+string Block::mineBlock(unsigned int difficulty, int allowedAttempts){
     char* cstr;
     cstr = new char[difficulty+1];
     for(int i=0; i<difficulty; i++){
@@ -39,10 +39,17 @@ void Block::mineBlock(unsigned int difficulty){
     string str(cstr);
 
     merkleRootHash = genMerkleRootHash();
-
+    int attempts = 0;
     while(sHash.substr(0, difficulty) !=str){
-        nonce++;
-        sHash = calculateHash();
+        if(attempts >= allowedAttempts){
+            return "0";
+            break;
+        }
+        else{
+            nonce++;
+            sHash = calculateHash();
+            attempts++;
+        }
     }
-    cout << "Hash of block " << index << ": " << sHash << "\n";
+    //cout << "Hash of block " << index << ": " << sHash << "\n";
 }
