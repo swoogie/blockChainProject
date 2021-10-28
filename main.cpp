@@ -86,6 +86,7 @@ int main(){
                     if(confirmation == "nice"){
                         int lastMember = bChain.chain.size();
                         break;
+                    }
             }
             allowedAttempts += 100000;
         }
