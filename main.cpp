@@ -70,20 +70,29 @@ int main(){
     Blockchain bChain(genesisBlock);
     int i = 1;
     while(tPool.size()>=100){
+        int allowedAttempts = 100000;
+
         for(int j=0; j<5; j++){
             tToBlock[j].clear();
             addTransactionsToBlock(tToBlock[j], tPool, numOfTransactions);
         }
+        
         cout << "Mining block " << i << "\n";
-        for(int j=0; j<5; j++){ 
-            if(bChain.addBlock(100000, Block(i, tToBlock[j])) == "0"){
-                continue;
+
+        string confirmation;
+        while(confirmation != "nice"){
+            for(int j=0; j<5; j++){ 
+                confirmation = bChain.addBlock(allowedAttempts, Block(i, tToBlock[j]));
+                    if(confirmation == "0"){
+                        continue;
+                     }
+                    else if(confirmation == "nice"){
+                        int lastMember = bChain.chain.size();
+                        cout << "Hash of Block" << bChain.chain[lastMember].index << ": " << bChain.chain[lastMember].sHash << "\n"; 
+                        break;
+                    }
             }
-            else{
-                int lastMember = bChain.chain.size();
-                cout << "Hash of Block" << bChain.chain[lastMember].index << ": " << bChain.chain[lastMember].sHash << "\n"; 
-                break;
-            }
+            allowedAttempts += 100000;
         }
         i++;
     }
