@@ -76,7 +76,7 @@ int main(){
             tToBlock[j].clear();
             addTransactionsToBlock(tToBlock[j], tPool, numOfTransactions);
         }
-        
+
         cout << "Mining block " << i << "\n";
 
         string confirmation;
@@ -88,7 +88,6 @@ int main(){
                      }
                     else if(confirmation == "nice"){
                         int lastMember = bChain.chain.size();
-                        cout << "Hash of Block" << bChain.chain[lastMember].index << ": " << bChain.chain[lastMember].sHash << "\n"; 
                         break;
                     }
             }

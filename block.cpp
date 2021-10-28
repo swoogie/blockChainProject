@@ -1,7 +1,7 @@
 #include "block.hpp"
 
 Block::Block(int indexIn, vector<Transaction> transactions){
-    index = indexIn;
+    this->index = indexIn;
     this->transactions = transactions;
     nonce = -1;
     this->timestamp = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
@@ -51,5 +51,6 @@ string Block::mineBlock(unsigned int difficulty, int allowedAttempts){
             attempts++;
         }
     }
-    //cout << "Hash of block " << index << ": " << sHash << "\n";
+    cout << "Hash of block " << index << ": " << sHash << "\n";
+    return "nice";
 }

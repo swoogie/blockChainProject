@@ -14,13 +14,13 @@ class Block{
         int version = 1;
         unsigned int difficulty;
         vector<Transaction> transactions;
-        string sHash;
-        int index;
         Block(int nIndexIn, vector<Transaction> transaction);
         string getHash();
         string mineBlock(unsigned int difficulty, int allowedAttempts);
         
     private:
+        string sHash;
+        int index;
         string merkleRootHash;
         int nonce;
         string sData;
