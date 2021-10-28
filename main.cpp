@@ -83,13 +83,9 @@ int main(){
         while(confirmation != "nice"){
             for(int j=0; j<5; j++){ 
                 confirmation = bChain.addBlock(allowedAttempts, Block(i, tToBlock[j]));
-                    if(confirmation == "0"){
-                        continue;
-                     }
-                    else if(confirmation == "nice"){
+                    if(confirmation == "nice"){
                         int lastMember = bChain.chain.size();
                         break;
-                    }
             }
             allowedAttempts += 100000;
         }
