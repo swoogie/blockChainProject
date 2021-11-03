@@ -9,8 +9,6 @@ transakcijos ID (kitų transakcijos laukų hash'as),
 siuntėjas (jo viešasis raktas)
 gavėjas (jo viešasis raktas)
 suma
-Transakcijų struktūrą galite tobulinti savo nuožiūra pvz., vietoj sąskaitos modelio (angl. account model) galite adaptuoti UTXO
-modelį, tačiau tai būtų gerokai sudėtingiau padaryti, todėl papildomai už tai galėtumėte uždirbti 0.5 balo!
 3. Iš transakcijų pool'o atsitiktinai pasirinkti 100-ą transakcijų, kurias bandysime įdėti į naują bloką (tarsime, kad naujas blokas talpins apie
 100 transakcijų). Reikiama bloko struktūra ir būtini atributai pateikti paveiksle aukščiau.
 4. Realizuokite naujų blokų kasimo (angl. mining) Proof-of-Work (PoW) tipo procesą, kurio tikslas yra surasti naujam blokui hash'ą, tenkinantį
