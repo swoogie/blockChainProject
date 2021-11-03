@@ -36,4 +36,5 @@ Terminal command for running:
 ---
 ## Versions
 v1.0 Is able to mine all blocks and works instantaniously upon running
+
 v2.0 Sometimes has hiccups and the process cuts out when simulating "decentralised" mining
