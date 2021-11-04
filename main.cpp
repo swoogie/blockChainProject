@@ -26,8 +26,22 @@ void addTransactionsToBlock(vector<Transaction> &tToBlock, vector<Transaction> &
         tPool[tIndex].publicSender->balance -= tAmount;
         tPool[tIndex].publicReceiver->balance += tAmount;
         tToBlock.push_back(tPool[tIndex]);
-        cout << "Sender key: " << tPool[tIndex].senderKey << " Receiver key: " << tPool[tIndex].receiverKey << " Amount: " << tPool[tIndex].amount << "\n";
-        tPool.erase(tPool.begin()+(tIndex));
+        // cout << "Sender key: " << tPool[tIndex].senderKey << " Receiver key: " << tPool[tIndex].receiverKey << " Amount: " << tPool[tIndex].amount << "\n";
+        //tPool.erase(tPool.begin()+(tIndex));
+        numOfTransactions--;
+    }
+}
+
+void addTransactionsToBlock(vector<Transaction> &tToBlock, vector<Transaction> &tPool, int &numOfTransactions, vector<int> &indices){
+    for(int i=0; i<100; i++){
+        int tIndex = getRandomInteger(0,numOfTransactions);
+        int tAmount = tPool[tIndex].amount;
+        tPool[tIndex].publicSender->balance -= tAmount;
+        tPool[tIndex].publicReceiver->balance += tAmount;
+        tToBlock.push_back(tPool[tIndex]);
+        indices.push_back(tIndex);
+        // cout << "Sender key: " << tPool[tIndex].senderKey << " Receiver key: " << tPool[tIndex].receiverKey << " Amount: " << tPool[tIndex].amount << "\n";
+        //tPool.erase(tPool.begin()+(tIndex));
         numOfTransactions--;
     }
 }
@@ -62,19 +76,24 @@ int main(){
             tPool.push_back(newTransaction);
         }
     }
-
+    int poolSize = tPool.size();
     vector<Transaction> tToBlock[5];
     int numOfTransactions = 10000;
     addTransactionsToBlock(tToBlock[0], tPool, numOfTransactions);
+    poolSize -= 100;
+    
     Block genesisBlock(0, tToBlock[0]);
     Blockchain bChain(genesisBlock);
+
+    vector<int> indices[5];
     int i = 1;
+    
     while(tPool.size()>=100){
         int allowedAttempts = 100000;
 
-        for(int j=0; j<5; j++){
+        for(int j=0; j<5; j++){ 
             tToBlock[j].clear();
-            addTransactionsToBlock(tToBlock[j], tPool, numOfTransactions);
+            addTransactionsToBlock(tToBlock[j], tPool, numOfTransactions, indices[j]);
         }
 
         cout << "Mining block " << i << "\n";
@@ -85,10 +104,20 @@ int main(){
                 confirmation = bChain.addBlock(allowedAttempts, Block(i, tToBlock[j]));
                     if(confirmation == "nice"){
                         int lastMember = bChain.chain.size();
+                        poolSize -= 100;
+                        for(int k=0; k<100; k++){
+                            tPool.erase(tPool.begin()+(indices[j][k]));
+                        }
+                        indices[0,1,2,3,4].clear();
                         break;
                     }
             }
-            allowedAttempts += 100000;
+            if(confirmation == "nice"){
+                break;
+            }
+            else{
+                allowedAttempts += 100000;
+            }
         }
         i++;
     }

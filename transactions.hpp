@@ -15,5 +15,4 @@ class Transaction{
         User* publicSender;
         User* publicReceiver;
         int amount;
-
 };
