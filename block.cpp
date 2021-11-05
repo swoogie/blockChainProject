@@ -13,10 +13,26 @@ string Block::getHash(){
 
 string Block::genMerkleRootHash(){
             string newHash;
+            vector<string> merkle;
             for(int i=0; i<transactions.size(); i++){
-                newHash += transactions[i].transactionID;
+                merkle.push_back(hashFun(transactions[i].transactionID));
             }
-            return hashFun(newHash);
+            
+            if (merkle.size() % 2 != 0){
+                merkle.push_back(merkle.back());
+            }
+            
+            while(merkle.size() > 1){
+                vector<string> newMerkle;
+                for(int it=0; it < merkle.size(); it += 2){
+                    string sNewMerkle = hashFun(merkle[it+1]) + hashFun(merkle[it]);
+                    newMerkle.push_back(hashFun(sNewMerkle));
+                }
+
+                merkle = newMerkle;
+            }
+
+            return merkle[0];
 }
 
 string Block::calculateHash() const{
