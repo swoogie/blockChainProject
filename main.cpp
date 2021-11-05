@@ -88,8 +88,13 @@ int main(){
     while(poolSize>=100){
         int allowedAttempts = 100000;
         numOfTransactions = tNumber;
+        int times = 5;
 
-        for(int j=0; j<5; j++){ 
+        if(numOfTransactions <= 400){
+            times = numOfTransactions/100;
+        }
+
+        for(int j=0; j<times; j++){ 
             tToBlock[j].clear();
             indices[j].clear();
             addTransactionsToBlock(tToBlock[j], tPool, numOfTransactions, indices[j]);
@@ -99,7 +104,7 @@ int main(){
 
         string confirmation;
         while(confirmation != "nice"){
-            for(int j=0; j<5; j++){ 
+            for(int j=0; j<times; j++){ 
                 confirmation = bChain.addBlock(allowedAttempts, Block(i, tToBlock[j]));
                     if(confirmation == "nice"){
                         cout << "Transactions of hash: \n";
