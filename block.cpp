@@ -1,7 +1,7 @@
 #include "block.hpp"
 
 Block::Block(int indexIn, vector<Transaction> transactions){
-    index = indexIn;
+    this->index = indexIn;
     this->transactions = transactions;
     nonce = -1;
     this->timestamp = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
@@ -13,10 +13,26 @@ string Block::getHash(){
 
 string Block::genMerkleRootHash(){
             string newHash;
+            vector<string> merkle;
             for(int i=0; i<transactions.size(); i++){
-                newHash += transactions[i].transactionID;
+                merkle.push_back(hashFun(transactions[i].transactionID));
             }
-            return hashFun(newHash);
+            
+            if (merkle.size() % 2 != 0){
+                merkle.push_back(merkle.back());
+            }
+            
+            while(merkle.size() > 1){
+                vector<string> newMerkle;
+                for(int it=0; it < merkle.size(); it += 2){
+                    string sNewMerkle = hashFun(merkle[it+1]) + hashFun(merkle[it]);
+                    newMerkle.push_back(hashFun(sNewMerkle));
+                }
+
+                merkle = newMerkle;
+            }
+
+            return merkle[0];
 }
 
 string Block::calculateHash() const{
@@ -27,7 +43,7 @@ string Block::calculateHash() const{
 }
 
 
-void Block::mineBlock(unsigned int difficulty){
+string Block::mineBlock(unsigned int difficulty, int allowedAttempts){
     char* cstr;
     cstr = new char[difficulty+1];
     for(int i=0; i<difficulty; i++){
@@ -38,11 +54,20 @@ void Block::mineBlock(unsigned int difficulty){
     
     string str(cstr);
 
-    merkleRootHash = genMerkleRootHash();
-
+    int attempts = 0;
     while(sHash.substr(0, difficulty) !=str){
-        nonce++;
-        sHash = calculateHash();
+        if(attempts >= allowedAttempts){
+            return "0";
+            break;
+        }
+        else{
+            nonce++;
+            sHash = calculateHash();
+            attempts++;
+        }
     }
-    cout << "Hash of block " << index << ": " << sHash << "\n";
+    merkleRootHash = genMerkleRootHash();
+    cout << "Hash of Block " << index << ": " << sHash << "\n";
+    cout << "Merkle Root Hash of Block " << index << ": " << merkleRootHash << "\n";
+    return "nice";
 }

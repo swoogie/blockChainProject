@@ -10,6 +10,15 @@
 
 using namespace std;
 
+bool valid(string transactionID, User* publicSender, User* publicReceiver, int amount){
+    if (transactionID == hashFun(publicSender->getPublicKey() + publicReceiver->getPublicKey() + to_string(amount))){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 void addTransactionsToBlock(vector<Transaction> &tToBlock, vector<Transaction> &tPool, int &numOfTransactions){
     for(int i=0; i<100; i++){
         int tIndex = getRandomInteger(0,numOfTransactions);
@@ -17,8 +26,18 @@ void addTransactionsToBlock(vector<Transaction> &tToBlock, vector<Transaction> &
         tPool[tIndex].publicSender->balance -= tAmount;
         tPool[tIndex].publicReceiver->balance += tAmount;
         tToBlock.push_back(tPool[tIndex]);
-        cout << "Sender key: " << tPool[tIndex].senderKey << " Receiver key: " << tPool[tIndex].receiverKey << " Amount: " << tPool[tIndex].amount << "\n";
-        tPool.erase(tPool.begin()+(tIndex));
+        numOfTransactions--;
+    }
+}
+
+void addTransactionsToBlock(vector<Transaction> &tToBlock, vector<Transaction> &tPool, int &numOfTransactions, vector<int> &indices){
+    for(int i=0; i<100; i++){
+        int tIndex = getRandomInteger(0,numOfTransactions);
+        int tAmount = tPool[tIndex].amount;
+        tPool[tIndex].publicSender->balance -= tAmount;
+        tPool[tIndex].publicReceiver->balance += tAmount;
+        tToBlock.push_back(tPool[tIndex]);
+        indices.push_back(tIndex);
         numOfTransactions--;
     }
 }
@@ -47,23 +66,66 @@ int main(){
         }
         User* sender = &listOfUsers[sIndex];
         User* receiver = &listOfUsers[rIndex];
-        Transaction newTransaction(sender, receiver, getRandomInteger(0,sender->balance));
-        tPool.push_back(newTransaction);
+        int balance = getRandomInteger(0,sender->balance);
+        Transaction newTransaction(sender, receiver, balance);
+        if(valid(newTransaction.transactionID, sender, receiver, balance)){
+            tPool.push_back(newTransaction);
+        }
     }
-
-    vector<Transaction> tToBlock;
+    int poolSize = tPool.size();
+    vector<Transaction> tToBlock[5];
     int numOfTransactions = 10000;
-    addTransactionsToBlock(tToBlock, tPool, numOfTransactions);
-    Block genesisBlock(0, tToBlock);
+    addTransactionsToBlock(tToBlock[0], tPool, numOfTransactions);
+    poolSize -= 100;
+    
+    Block genesisBlock(0, tToBlock[0]);
     Blockchain bChain(genesisBlock);
+
+    vector<int> indices[5];
     int i = 1;
-    while(tPool.size()>=100){
-        tToBlock.clear();
-        addTransactionsToBlock(tToBlock, tPool, numOfTransactions);
-        cout << "Mining block " << i << "\n";
-        bChain.addBlock(Block(i, tToBlock));
+    
+    int tNumber = 9900;
+    while(poolSize>=100){
+        int allowedAttempts = 100000;
+        numOfTransactions = tNumber;
+        int times = 5;
+
+        if(numOfTransactions <= 400){
+            times = numOfTransactions/100;
+        }
+
+        for(int j=0; j<times; j++){ 
+            tToBlock[j].clear();
+            indices[j].clear();
+            addTransactionsToBlock(tToBlock[j], tPool, numOfTransactions, indices[j]);
+        }//
+
+        cout << "Mining Block " << i << "\n";
+
+        string confirmation;
+        while(confirmation != "nice"){
+            for(int j=0; j<times; j++){ 
+                confirmation = bChain.addBlock(allowedAttempts, Block(i, tToBlock[j]));
+                    if(confirmation == "nice"){
+                        cout << "Transactions of hash: \n";
+                        for(int i=0; i<tToBlock[j].size(); i++){
+                            cout << "Sender key: " << tToBlock[j][i].senderKey << " Receiver key: " << tToBlock[j][i].receiverKey << " Amount: " << tToBlock[j][i].amount << "\n";
+                        }
+
+                        poolSize -= 100;
+                        for(int k=0; k<100; k++){
+                            tPool.erase(tPool.begin()+(indices[j][k]));
+                        }
+                        tNumber -= 100;
+                        indices[0,1,2,3,4].clear();
+                        break;
+                    }
+            }
+
+            allowedAttempts += 100000;
+        }
         i++;
     }
     cout << "finished. \n";
-    tToBlock.clear();
+    tToBlock[1,2,3,4,5].clear();
 }

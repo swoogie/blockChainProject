@@ -8,11 +8,11 @@ using namespace std;
 class Blockchain {
     public:
         Blockchain(Block genesisBlock);
-
-        void addBlock(Block bNew);
+        vector<Block> chain;
+        string addBlock(int allowedAttempts, Block bNew);
 
     private:
         unsigned int difficulty;
-        vector<Block> chain;
+        
         Block getLastBlock() const;
 };
