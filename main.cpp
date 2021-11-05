@@ -26,8 +26,6 @@ void addTransactionsToBlock(vector<Transaction> &tToBlock, vector<Transaction> &
         tPool[tIndex].publicSender->balance -= tAmount;
         tPool[tIndex].publicReceiver->balance += tAmount;
         tToBlock.push_back(tPool[tIndex]);
-        // cout << "Sender key: " << tPool[tIndex].senderKey << " Receiver key: " << tPool[tIndex].receiverKey << " Amount: " << tPool[tIndex].amount << "\n";
-        //tPool.erase(tPool.begin()+(tIndex));
         numOfTransactions--;
     }
 }
@@ -40,8 +38,6 @@ void addTransactionsToBlock(vector<Transaction> &tToBlock, vector<Transaction> &
         tPool[tIndex].publicReceiver->balance += tAmount;
         tToBlock.push_back(tPool[tIndex]);
         indices.push_back(tIndex);
-        // 
-        //tPool.erase(tPool.begin()+(tIndex));
         numOfTransactions--;
     }
 }
@@ -88,15 +84,18 @@ int main(){
     vector<int> indices[5];
     int i = 1;
     
-    while(tPool.size()>=100){
+    int tNumber = 9900;
+    while(poolSize>=100){
         int allowedAttempts = 100000;
+        numOfTransactions = tNumber;
 
         for(int j=0; j<5; j++){ 
             tToBlock[j].clear();
+            indices[j].clear();
             addTransactionsToBlock(tToBlock[j], tPool, numOfTransactions, indices[j]);
-        }
+        }//
 
-        cout << "Mining block " << i << "\n";
+        cout << "Mining Block " << i << "\n";
 
         string confirmation;
         while(confirmation != "nice"){
@@ -107,21 +106,18 @@ int main(){
                         for(int i=0; i<tToBlock[j].size(); i++){
                             cout << "Sender key: " << tToBlock[j][i].senderKey << " Receiver key: " << tToBlock[j][i].receiverKey << " Amount: " << tToBlock[j][i].amount << "\n";
                         }
-                        
+
                         poolSize -= 100;
                         for(int k=0; k<100; k++){
                             tPool.erase(tPool.begin()+(indices[j][k]));
                         }
+                        tNumber -= 100;
                         indices[0,1,2,3,4].clear();
                         break;
                     }
             }
-            if(confirmation == "nice"){
-                break;
-            }
-            else{
-                allowedAttempts += 100000;
-            }
+
+            allowedAttempts += 100000;
         }
         i++;
     }

@@ -67,7 +67,7 @@ string Block::mineBlock(unsigned int difficulty, int allowedAttempts){
         }
     }
     merkleRootHash = genMerkleRootHash();
-    cout << "Hash of block " << index << ": " << sHash << "\n";
+    cout << "Hash of Block " << index << ": " << sHash << "\n";
     cout << "Merkle Root Hash of Block " << index << ": " << merkleRootHash << "\n";
     return "nice";
 }
