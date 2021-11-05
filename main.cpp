@@ -40,7 +40,7 @@ void addTransactionsToBlock(vector<Transaction> &tToBlock, vector<Transaction> &
         tPool[tIndex].publicReceiver->balance += tAmount;
         tToBlock.push_back(tPool[tIndex]);
         indices.push_back(tIndex);
-        // cout << "Sender key: " << tPool[tIndex].senderKey << " Receiver key: " << tPool[tIndex].receiverKey << " Amount: " << tPool[tIndex].amount << "\n";
+        // 
         //tPool.erase(tPool.begin()+(tIndex));
         numOfTransactions--;
     }
@@ -103,7 +103,11 @@ int main(){
             for(int j=0; j<5; j++){ 
                 confirmation = bChain.addBlock(allowedAttempts, Block(i, tToBlock[j]));
                     if(confirmation == "nice"){
-                        int lastMember = bChain.chain.size();
+                        cout << "Transactions of hash: \n";
+                        for(int i=0; i<tToBlock[j].size(); i++){
+                            cout << "Sender key: " << tToBlock[j][i].senderKey << " Receiver key: " << tToBlock[j][i].receiverKey << " Amount: " << tToBlock[j][i].amount << "\n";
+                        }
+                        
                         poolSize -= 100;
                         for(int k=0; k<100; k++){
                             tPool.erase(tPool.begin()+(indices[j][k]));
